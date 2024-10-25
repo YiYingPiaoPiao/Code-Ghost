@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>个人简介</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link " style="height: 6vh;" href="/homePage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <p class="nav-link mb-0" style="height: 6vh;" href="#">选题分析</p>
+                    <ul class="nav nav-pills flex-column pl-5">
+                        <li class="nav-item border-bottom border-top border-white">
+                            <a class="nav-link " href="/insertArticle">导入文献</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="/searchArticle">检索文献</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link " style="height: 6vh;" href="/searchHistory">查询记录</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/profile">个人中心</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10">
+
+        <div class="card m-3 p-3 rounded-lg shadow" style="height: 80vh;">
+            <form action="/editPassword" method="post" class="was-validated" style="font-size: 1.5rem;">
+                <div class="form-group">
+                    <label for="uid">账户ID:</label>
+                    <input type="text" class="form-control" id="uid" placeholder="Enter ID" name="uid" th:value="${userId}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="uname">账户名字:</label>
+                    <input type="text" class="form-control" id="uname" placeholder="Enter username" th:value="${userName}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="upwd">账户密码:</label>
+                    <input type="text" class="form-control" id="upwd" placeholder="Enter initial password" th:value="${userPassword}" readonly>
+                </div>
+                <label>账户权限:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="uaccess" name="uaccess" readonly
+                           th:value="${userAccessLevel == 3 ? '管理员' : (userAccessLevel == 2 ? '老师' : '学生')}" >
+                </div>
+
+                <div class="form-group">
+                    <label for="npwd">新密码:</label>
+                    <input type="password" class="form-control" name="npwd" id="npwd" placeholder="新密码"  required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rpwd">重新输入新密码:</label>
+                    <input type="password" class="form-control" name="rpwd" id="rpwd" placeholder="重新输入新密码"  required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">更新密码</button>
+            </form>
+            <div th:if="${error}" class="error" style="color: red;">
+                <p th:text="${error}"></p>
+            </div>
+
+            <div th:if="${successMessage}" class="alert alert-success m-4" id="successMessage">
+                <div class="spinner-border text-success"></div>
+                <p th:text="${successMessage}"></p>
+            </div>
+        </div>
+
+    </aside>
+</section>
+
+<script>
+    // Automatically hide success message after 5 seconds
+    setTimeout(function() {
+        document.getElementById("successMessage").style.display = "none";
+    }, 500);
+
+</script>
+</body>
+</html>

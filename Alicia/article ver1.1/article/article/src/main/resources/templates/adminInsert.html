@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>论文导入</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/adminPage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/notice">发布通知</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/userManage">用户管理</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/adminInsert">首页论文</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10 p-0">
+        <div class="card m-3 rounded-lg shadow p-4" style="height: 30vh;">
+            <form action="/adminAddArticle" method="post" enctype="multipart/form-data" class="was-validated">
+                <p>导入文献</p>
+                <div class="custom-file mb-3">
+                    <input type="file" class="custom-file-input" id="customFile" name="filename" onchange="updateFileNameLabel(this)" required>
+                    <label class="custom-file-label" for="customFile">选择文献</label>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn bgColor-g text-white float-right">上传文献</button>
+                </div>
+            </form>
+            <!-- Display success message -->
+            <div th:if="${successMessage}" class="alert alert-success m-4" id="successMessage">
+                <div class="spinner-border text-success"></div>
+                <p th:text="${successMessage}"></p>
+            </div>
+
+            <!-- Display error message -->
+            <div th:if="${errorMessage}" class="alert alert-danger m-4" id="errorMessage">
+                <div class="spinner-border text-danger"></div>
+                <p th:text="${errorMessage}"></p>
+            </div>
+        </div>
+        <div class="card m-3 rounded-lg shadow" style="height: 50vh;">
+            <div class="card m-3 rounded-lg shadow" style="height: 100%; overflow:auto;">
+                <table class="table table-bordered table-hover">
+                    <thead class="bgColor-g" style="position: sticky; top: 0;">
+                    <tr>
+                        <th>Article Name</th>
+                        <th>Upload Time</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="article : ${articleList}">
+                        <td th:text="${article.article_Name}"></td>
+                        <td th:text="${article.upload_Date}"></td>
+                        <td>
+                            <form action="/adminDownloadArticle" method="post">
+                                <input type="hidden" th:value="${article.upload_User_Id}" name="uploadUserId">
+                                <input type="hidden" th:value="${article.article_Name}" name="articleName">
+                                <input type="hidden" th:value="${article.Id}" name="articleId">
+                                <button type="submit" class="btn btn-info">下载文献</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </aside>
+</section>
+
+<script>
+    function updateFileNameLabel(input) {
+        var fileName = input.value.split("\\").pop();
+        var label = input.nextElementSibling;
+        label.innerHTML = fileName;
+        label.classList.add("selected");
+    }
+</script>
+
+<script>
+    // Automatically hide success message after 5 seconds
+    setTimeout(function() {
+        document.getElementById("successMessage").style.display = "none";
+    }, 3000);
+
+    // Automatically hide error message after 5 seconds
+    setTimeout(function() {
+        document.getElementById("errorMessage").style.display = "none";
+    }, 3000);
+</script>
+</body>
+</html>

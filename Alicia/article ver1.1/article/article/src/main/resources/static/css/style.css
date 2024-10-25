@@ -1,0 +1,45 @@
+body {
+     font-family: '微软雅黑', 'Century Gothic', Arial, sans-serif;
+     box-sizing: border-box;
+}
+
+.color-g{
+    color: rgb(0, 108, 57);
+}
+
+.bgColor-g{
+    background-color: rgb(0, 108, 57);
+}
+
+.color-b{
+    color: rgb(161, 63, 11);
+}
+
+.bgColor-b{
+    background-color: rgb(161, 63, 11);
+
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: white ;
+  background-color: rgb(0, 167, 89);
+  font-size:x-large;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+    font-size:x-large;
+  }
+  
+  a:hover {
+    color: rgb(63, 63, 63);
+    text-decoration: underline;
+  }
+
+  p.nav-link{
+    color: white ;
+    font-size:x-large;
+  }

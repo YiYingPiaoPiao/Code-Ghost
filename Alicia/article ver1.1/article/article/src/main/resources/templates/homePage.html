@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="../static/icon/css/brands.css">
+    <link rel="stylesheet" href="../static/icon/css/solid.css">
+
+    <script src="../static/js/d3.v7.js"></script>
+    <script src="../static/js/bootstrap.bundle.js"></script>
+
+    <title>首页</title>
+</head>
+<body>
+
+    <header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+        <div class="p-2">
+            <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+        </div>
+
+        <div class="p-2">
+            <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+                专业论文选题管理系统
+            </h1>
+        </div>
+
+        <div class="p-2 ">
+            <a href="/message">
+                <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+                <!-- <span class="badge badge-danger">4</span> -->
+            </a>
+        </div>
+    </header>
+
+    <section class="row">
+        <nav class="col-2">
+            <div class="bgColor-g" style="height: 85vh;">
+                <ul class="nav nav-pills nav-justified flex-column">
+                    <li class="nav-item border-bottom border-white">
+                        <a class="nav-link active" style="height: 6vh;" href="/homePage">首页</a>
+                    </li>
+                    <li class="nav-item border-bottom border-white">
+                        <p class="nav-link mb-0" style="height: 6vh;" href="#">选题分析</p>
+                        <ul class="nav nav-pills flex-column pl-5">
+                            <li class="nav-item border-bottom border-top border-white">
+                                <a class="nav-link" href="/insertArticle">导入文献</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="/searchArticle">检索文献</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item border-bottom border-white">
+                        <a class="nav-link" style="height: 6vh;" href="/searchHistory">查询记录</a>
+                    </li>
+                    <li class="nav-item border-bottom border-white">
+                        <a class="nav-link" style="height: 6vh;" href="/profile">个人中心</a>
+                    </li>
+
+                </ul>
+                <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                    <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+                </div>
+            </div>
+        </nav>
+        <aside class="col-10">
+            <div class="card m-3 rounded-lg shadow" style="height: 80vh;">
+                <div style="overflow: auto">
+                    <div id="my_dataviz"></div>
+                </div>
+
+            </div>
+        </aside>
+    </section>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var csvData = /*[[${csvFile}]]*/ 'Default CSV Data';
+        console.log(csvData);
+        /*]]>*/
+    </script>
+
+
+    <script th:inline="javascript">
+
+        /*<![CDATA[*/
+        var csvData = /*[[${csvFile}]]*/ 'Default CSV Data';
+        /*]]>*/
+
+
+        // set the dimensions and margins of the graph
+        const margin = {top: 30, right: 0, bottom: 30, left: 50},
+        width = 210 - margin.left - margin.right,
+        height = 210 - margin.top - margin.bottom;
+
+        //Read the data
+        const data = d3.csvParse(csvData);
+
+        // Sort the data by year in ascending order
+        data.sort((a, b) => a.year - b.year);
+
+        // group the data: I want to draw one line per group
+        const sumstat = d3.group(data, d => d.keyword) // nest function allows to group the calculation per level of a factor
+
+        // What is the list of groups?
+        allKeys = new Set(data.map(d=>d.keyword))
+
+        // Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
+        const svg = d3.select("#my_dataviz")
+            .selectAll("uniqueChart")
+            .data(sumstat)
+            .enter()
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                `translate(${margin.left},${margin.top})`);
+
+        // Add X axis --> it is a band scale now
+        const x = d3.scaleBand()
+            .domain(data.map(d => d.year))
+            .range([0, width])
+            .padding(0.1);
+
+        svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
+
+        // Add Y axis --> it is a band scale now
+        const y = d3.scaleBand()
+            .domain(data.map(d => d.value))
+            .range([height, 0])
+            .padding(0.1);
+
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        // color palette
+        const color = d3.scaleOrdinal()
+            //.domain(allKeys)
+            .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#e8c205','#a65628','#f781bf','#999999'])
+
+        // Draw the line
+        svg.append("path")
+            .attr("fill", "none")
+            .attr("stroke", function(d) { return color(d[0]); })
+            .attr("stroke-width", 1.9)
+            .attr("d", function(d) {
+                return d3.line()
+                    .x(function(d) { return x(d.year) + x.bandwidth() / 2; }) // Adjusting for band scale
+                    .y(function(d) { return y(d.value) + y.bandwidth() / 2; }) // Adjusting for band scale
+                    .defined(d => !isNaN(d.value))
+                    (d[1]);
+            });
+
+        // Add dots
+        svg.selectAll(".dot")
+            .data(function(d) { return d[1]; })
+            .enter().append("circle") // Append circle elements
+            .attr("class", "dot")
+            .attr("cx", function(d) { return x(d.year) + x.bandwidth() / 2; }) // Adjusting for band scale
+            .attr("cy", function(d) { return y(d.value) + y.bandwidth() / 2; }) // Adjusting for band scale
+            .attr("r", 3) // Set radius of circles
+            .style("fill", function(d) { return color(d.keyword); });
+
+        // Add titles
+        svg
+            .append("text")
+            .attr("text-anchor", "start")
+            .attr("y", -5)
+            .attr("x", 0)
+            .text(function(d){ return(d[0])})
+            .style("fill", function(d){ return color(d[0]) })
+
+
+    </script>
+
+</body>
+</html>

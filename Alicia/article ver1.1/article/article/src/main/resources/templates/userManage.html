@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>用户管理</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/adminPage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/notice">发布通知</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/userManage">用户管理</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/adminInsert">首页论文</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10">
+        <div class="card m-3 rounded-lg shadow" style="height: 50vh; overflow: auto;">
+            <table class="table table-bordered table-hover">
+                <thead style="position: sticky; top:0;" class="bgColor-g">
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>User Access</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="users : ${usersList}">
+                    <td th:text="${users.userId}">News Content</td>
+                    <td th:text="${users.userName}">News Content</td>
+                    <td>
+                        <span th:switch="${users.userAccessLvl}">
+                            <span th:case="1">学生</span>
+                            <span th:case="2">老师</span>
+                            <span th:case="3">管理员</span>
+                            <span th:case="*" th:text="(${users.userAccessLvl} == 1 ? '学生' : (${users.userAccessLvl} == 2 ? '老师' : '管理员'))"></span>
+                        </span>
+                    </td>
+                    <td>
+                        <form action="/selectUser" method="post">
+                            <input type="hidden" th:value="${users.userId}" name="usersId">
+                            <input type="hidden" th:value="${users.userAccessLvl}" name="selectUserAccessLvl">
+                            <input type="hidden" th:value="${users.userName}" name="selectUserName">
+                            <button type="submit" class="btn btn-info">编辑权限</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card m-3 rounded-lg shadow" style="height: 30vh;">
+            <form action="/updateUser" method="post" class="was-validated ml-3" style="font-size: 1.2rem;">
+                <label class="d-block">编辑权限 :</label>
+                <div class="row">
+                <div class="form-group col">
+                    <label for="selectUserId">User Id :</label>
+                    <input type="text" class="form-control" th:value="${selectUserId}" name="selectUserId" id="selectUserId" required readonly>
+                </div>
+                <div class="form-group col">
+                    <label for="selectUserName">User Name :</label>
+                    <input type="text" class="form-control" th:value="${selectUserName}" name="selectUserName" id="selectUserName" required readonly>
+                </div>
+                </div>
+                <label>账户权限:</label>
+                <div class="form-group form-inline" style="font-size: 1.2rem;">
+                    <input type="radio" id="std" name="selectUserAccess" value=1 th:checked="${selectUserAccessLvl == 1}" required>
+                    <label for="std" class="mr-5">学生</label><br>
+                    <input type="radio" id="tch" name="selectUserAccess" value=2 th:checked="${selectUserAccessLvl == 2}" required>
+                    <label for="tch" class="mr-5">老师</label><br>
+                    <input type="radio" id="adm" name="selectUserAccess" value=3 th:checked="${selectUserAccessLvl == 3}" required>
+                    <label for="adm" class="mr-5">管理员</label>
+<!--                    <div class="invalid-feedback">请选择用户权限.</div>-->
+                </div>
+                <div th:if="${error}" class="error" style="color: red;">
+                    <p th:text="${error}"></p>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-lg float-right mr-4 mb-3">更新权限</button>
+                </div>
+            </form>
+        </div>
+    </aside>
+</section>
+
+</body>
+</html>

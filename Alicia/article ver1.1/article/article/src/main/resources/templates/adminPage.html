@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>管理员</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 class="no-wrap" style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/adminPage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/notice">发布通知</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/userManage">用户管理</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/adminInsert">首页论文</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10">
+        <div class="card m-3 p-3 rounded-lg shadow">
+            <form action="/adminPage" method="post" class="needs-validation" style="font-size: 1.5rem;" novalidate>
+                <div class="form-group">
+                    <label for="uid">账户ID:</label>
+                    <input type="text" class="form-control" id="uid" placeholder="Enter ID" name="uid" th:value="${generateId}" required readonly>
+                    <div class="invalid-feedback">请选择用户ID.</div>
+                </div>
+                <div class="form-group">
+                    <label for="uname">账户名字:</label>
+                    <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+                    <div class="invalid-feedback">请填写用户名.</div>
+                </div>
+                <div class="form-group">
+                    <label for="upwd">账户密码:</label>
+                    <input type="password" class="form-control" id="upwd" placeholder="Enter initial password" name="upwd" required>
+                    <div class="invalid-feedback">请填写初始密码.</div>
+                </div>
+                <label>账户权限:</label>
+                <div class="form-group">
+                    <input type="radio" id="std" name="uaccess" value=1 required>
+                    <label for="std">学生</label><br>
+                    <input type="radio" id="tch" name="uaccess" value=2 required>
+                    <label for="tch">老师</label><br>
+                    <input type="radio" id="adm" name="uaccess" value=3 required>
+                    <label for="adm">管理员</label>
+                    <div class="invalid-feedback">请选择用户权限.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">创建用户</button>
+            </form>
+        </div>
+    </aside>
+</section>
+<script>
+    // Disable form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Get the forms we want to add validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>通告</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2 p-0">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/adminPage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/notice">发布通知</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/userManage">用户管理</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/adminInsert">首页论文</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10 p-0">
+        <div class="card m-3 rounded-lg shadow" style="height: 60vh; overflow: auto;">
+            <table class="table table-bordered table-hover">
+                <thead style="position: sticky; top:0;" class="bgColor-g">
+                <tr>
+                    <th>News</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="news : ${newsList}">
+                    <td th:text="${news.news}">News Content</td>
+                    <td>
+                        <form action="/delectNews" method="post">
+                            <input type="hidden" th:value="${news.Id}" name="newsId">
+                            <button type="submit" class="btn btn-danger">删除</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card m-3 rounded-lg shadow" style="height: 20vh;">
+            <form action="/addNews" method="post" class="was-validated ml-3" style="font-size: 1.5rem;">
+                <div class="form-group">
+                    <label for="newsNews">发布内容 :</label>
+                    <input type="text" class="form-control" placeholder="Enter Notice" name="newsNews" id="newsNews" required>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                    <button type="submit" class="btn btn-success btn-lg float-right mr-2 mb-3">发布</button>
+                </div>
+            </form>
+        </div>
+    </aside>
+</section>
+
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

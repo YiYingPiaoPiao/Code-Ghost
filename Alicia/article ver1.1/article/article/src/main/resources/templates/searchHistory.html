@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/icon/css/fontawesome.css">
+    <link rel="stylesheet" href="/icon/css/brands.css">
+    <link rel="stylesheet" href="/icon/css/solid.css">
+
+    <script src="/js/d3.v7.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+
+    <title>历史记录</title>
+</head>
+<body>
+
+<header class="container-fluid d-flex justify-content-between" style="background-color: rgb(246, 238, 227);">
+
+    <div class="p-2">
+        <img src="/image/bbmLogo.jpeg" alt="School Logo" width="350vw">
+    </div>
+
+    <div class="p-2">
+        <h1 style="font-size: 4vmax; color: rgb(161, 63, 11);">
+            专业论文选题管理系统
+        </h1>
+    </div>
+
+    <div class="p-2 ">
+        <a href="/message">
+            <i class="fa-solid fa-envelope fa-3x" style="color: #006c39;"></i>
+            <!-- <span class="badge badge-danger">4</span> -->
+        </a>
+    </div>
+</header>
+
+<section class="row">
+    <nav class="col-2">
+        <div class="bgColor-g" style="height: 85vh;">
+            <ul class="nav nav-pills nav-justified flex-column">
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link " style="height: 6vh;" href="/homePage">首页</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <p class="nav-link mb-0" style="height: 6vh;" href="#">选题分析</p>
+                    <ul class="nav nav-pills flex-column pl-5">
+                        <li class="nav-item border-bottom border-top border-white">
+                            <a class="nav-link " href="/insertArticle">导入文献</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="/searchArticle">检索文献</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link active" style="height: 6vh;" href="/searchHistory">查询记录</a>
+                </li>
+                <li class="nav-item border-bottom border-white">
+                    <a class="nav-link" style="height: 6vh;" href="/profile">个人中心</a>
+                </li>
+
+            </ul>
+            <div class="nav-item border-top border-white" style="position: fixed; bottom: 0; width: auto;">
+                <a class="nav-link ml-4" style="height: 6vh;" href="/logout">退出登录</a>
+            </div>
+        </div>
+    </nav>
+    <aside class="col-10">
+        <div class="card m-3 rounded-lg shadow" style="height: 80vh;">
+            <div style="overflow:auto;">
+            <table class="table table-bordered table-hover">
+                <thead class="bgColor-g" style="position: sticky; top: 0;">
+                <tr>
+                    <th>Article Name</th>
+                    <th>Upload Time</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${articleList}">
+                    <td th:text="${article.article_Name}"></td>
+                    <td th:text="${article.upload_Date}"></td>
+                    <td>
+                        <form action="/downloadArticle" method="post">
+                            <input type="hidden" th:value="${article.upload_User_Id}" name="uploadUserId">
+                            <input type="hidden" th:value="${article.article_Name}" name="articleName">
+                            <input type="hidden" th:value="${article.Id}" name="articleId">
+                            <button type="submit" class="btn btn-info">下载文献</button>
+                        </form>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </aside>
+</section>
+
+</body>
+</html>
